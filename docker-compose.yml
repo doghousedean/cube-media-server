@@ -1,0 +1,43 @@
+version: "3.0"
+
+services:
+    couchpotato:
+            image: linuxserver/couchpotato
+            ports:
+                - "5050:5050"
+            volumes:
+                - /opt/couchpotato:/config
+                - /storage/downloads:/downloads
+                - /storage/movies:/movies
+            environment:
+                - PUID=1000
+                - PGID=1000
+                - UMAST_SET=<022>
+            network_mode: host
+    nzbget:
+            image: linuxserver/nzbget
+            ports:
+                - "6789:6789"
+            volumes:
+                - /opt/nzbget:/config
+                - /storage/downloads:/downloads
+                - /storage/TV:/tv
+                - /storage/movies:/movies
+            network_mode: host
+            environment:
+                - PUID=1000
+                - PGID=1000
+    deluge:
+        ports:
+            - "8112:8112"
+        image: linuxserver/deluge
+        volumes:
+            - /storage/downloads:/downloads
+            - /opt/deluge:/config
+            - /storage/TV:/tv
+            - /storage/movies:/movies
+        network_mode: host
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - UMAST_SET=<022>
