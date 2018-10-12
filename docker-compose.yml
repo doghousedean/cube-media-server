@@ -1,6 +1,7 @@
 version: "2"
 services:
     couchpotato:
+            restart: always
             container_name: couchPotato
             image: linuxserver/couchpotato
             ports:
@@ -15,6 +16,7 @@ services:
                 - UMAST_SET=<022>
             network_mode: host
     nzbget:
+            restart: always
             container_name: nzbGET
             image: linuxserver/nzbget
             ports:
@@ -29,6 +31,7 @@ services:
                 - PUID=1000
                 - PGID=1000
     deluge:
+        restart: always
         container_name: deluge
         ports:
             - "8112:8112"
