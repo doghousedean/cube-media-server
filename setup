@@ -1,0 +1,56 @@
+#!/bin/bash
+
+## Media server setup script
+echo
+echo "Media Server Setup Script - MSSS"
+echo "================================"
+echo
+# 1. Check directories exist
+echo "1. Check storage"
+echo "----------------"
+echo
+# Find all storage paths in the compose file, will change this at some point to auto find the volumes even without /storage as the root
+
+DIRS=`grep storage docker-compose.yml | tr -d ' ' | sort -u | cut -d ":" -f 1 | tr -d '-'`
+
+while read line
+do
+	echo "Working with $line"
+	if [ ! -d "$line" ]
+	then
+		echo -e "\t$line doesn't exists, creating..."
+		mkdir -p $line
+	else
+		echo -e "\t$line exists, moving on..."
+	fi
+
+done <<< "$DIRS"
+
+# 2. Check docker utils, install if needed
+
+DOCKER_INSTALL=""
+echo
+echo "2. Checking docker utils"
+echo "------------------------"
+echo
+docker version > /dev/null 2>&1
+if [[ $? != 0 ]]
+then
+	echo -e "\tdocker missing, adding to install list"
+	DOCKERINSTALL="docker"
+fi
+
+docker-compose version > /dev/null 2>&1
+if [[ $? != 0 ]]
+then
+	echo -e "\tdocker-compose missing, adding to install list"
+        DOCKERINSTALL="$DOCKERINSTALL docker-compose"
+fi
+
+if [ "$DOCKERINSTALL" == "" ]
+then
+	echo "Docker is installed, move along"
+else
+	echo "Installing missing docker utils"
+	echo "apt-get -yqq update; apt-get -yqq install $DOCKERINSTALL"
+fi

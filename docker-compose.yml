@@ -1,5 +1,26 @@
 version: "2"
 services:
+     proxy:
+      build: nginx/
+      container_name: "portainer-proxy"
+      ports:
+        - "80:80"
+      networks:
+        - local
+      templates:
+        image: portainer/templates
+        container_name: "portainer-templates"
+        networks:
+        - local
+    portainer:
+      image: portainer/portainer
+      container_name: "portainer-app"
+      command: --templates http://templates/templates.json
+      networks:
+        - local
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /opt/portainer/data:/data
     couchpotato:
             restart: always
             container_name: couchPotato
@@ -26,6 +47,7 @@ services:
                 - /storage/downloads:/downloads
                 - /storage/TV:/tv
                 - /storage/movies:/movies
+                - /storage/4k:/4k
             network_mode: host
             environment:
                 - PUID=1000
@@ -41,8 +63,20 @@ services:
             - /opt/deluge:/config
             - /storage/TV:/tv
             - /storage/movies:/movies
+            - /storage/4k:/4k
         network_mode: host
         environment:
             - PUID=1000
             - PGID=1000
             - UMAST_SET=<022>
+    watchtower:
+      image: v2tec/watchtower
+      container_name: "portainer-watchtower"
+      command: --cleanup portainer-app portainer-watchtower portainer/templates
+      networks:
+        - local
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+networks:
+  local:
+    driver: bridge
