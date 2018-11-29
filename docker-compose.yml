@@ -17,7 +17,7 @@ services:
         volumes:
             - /opt/couchpotato:/config
             - /storage/downloads:/downloads
-            - /storage/movies:/movies
+            - /storage/data/movies:/movies
         environment:
             - PUID=1000
             - PGID=1000
@@ -32,14 +32,28 @@ services:
         volumes:
             - /storage/downloads:/downloads
             - /opt/deluge:/config
-            - /storage/TV:/tv
-            - /storage/movies:/movies
-            - /storage/4k:/4k
+            - /storage/data/TV:/tv
+            - /storage/data/movies:/movies
+            - /storage/data/4k:/4k
         network_mode: host
         environment:
             - PUID=1000
             - PGID=1000
             - UMAST_SET=<022>
+    plex:
+        image: plexinc/pms-docker
+        container_name: "plex.tv"
+        ports:
+            - "32400:32400"
+        volumes:
+            - /storage/plex/config:/config
+            - /storage/plex/transcode/temp:/transcode
+            - /storage/data/movies:/movies
+            - /storage/data/TV:/TV
+            - /storage/data/4k:/4k
+        environment:
+            - TZ="europe/london"
+        network_mode: host
     watchtower:
         image: v2tec/watchtower
         container_name: "portainer-watchtower"
