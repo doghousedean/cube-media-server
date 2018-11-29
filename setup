@@ -54,3 +54,37 @@ else
 	echo "Installing missing docker utils"
 	echo "apt-get -yqq update; apt-get -yqq install $DOCKERINSTALL"
 fi
+
+# 3. Update rc.local if needed
+
+echo
+echo "3. Checking boot up of docker"
+echo "-----------------------------"
+echo
+
+grep $PWD/docker-compose.yml /etc/rc.local > /dev/null 2>&1 
+if [[ $? != 0 ]]
+then
+	echo -e "\tMissing launcher, adding now..."
+	echo "" >> /etc/rc.local
+	echo "## Starting media server - added by $PWD/setup" >> rc.local
+	echo "docker-compose -f $PWD/docker-compose.yml up -d" >> /etc/rc.local
+	echo 
+else
+	echo -e "\tLauncher is OK, moving on."
+fi
+
+# 4. All done, ask if we want to run it
+echo
+echo "Work complete."
+echo "=============="
+echo
+
+while true; do
+    read -p "Shall I start the containers now? [Y]es [N]o " yn
+    case $yn in
+        [Yy]* ) echo -e "\tLaunching MSSS"; docker-compose -f $PWD/docker-compose.yml up -d; break;;
+        [Nn]* ) echo ; echo "No worries, run this to start or reboot"; echo -e "\tdocker-compose -f $PWD/docker-compose.yml up -d"; exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
