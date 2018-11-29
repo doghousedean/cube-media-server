@@ -1,14 +1,8 @@
 version: "2"
 services:
-    templates:
-        image: portainer/templates
-        container_name: "portainer-templates"
-        ports:
-            - "8888:80"
     portainer:
         image: portainer/portainer
         container_name: "portainer-app"
-        command: --templates http://templates/templates.json
         ports:
             - "9000:9000"
         volumes:
