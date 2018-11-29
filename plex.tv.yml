@@ -1,0 +1,14 @@
+version: "2"
+services:
+    plex:
+        image: plexinc/pms-docker
+        container_name: "plex.tv"
+        ports:
+            - "32400:32400"
+        volumes:
+            - /storage/plex/config:/config
+            - /storage/plex/transcode/temp:/transcode
+            - /storage/plex/media:/data
+        environment:
+            - TZ="europe/london"
+        network-mode: host
