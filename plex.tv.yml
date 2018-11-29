@@ -8,7 +8,9 @@ services:
         volumes:
             - /storage/plex/config:/config
             - /storage/plex/transcode/temp:/transcode
-            - /storage/plex/media:/data
+            - /storage/plex/data/movies:/movies
+            - /storage/plex/data/TV:/TV
+            - /storage/plex/data/4k:/4k
         environment:
             - TZ="europe/london"
-        network-mode: host
+        network_mode: host
