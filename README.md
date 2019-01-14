@@ -22,6 +22,9 @@
  
 ### 4. Once finished you should have the following containers running and ready for use
 
+    Plex, on port 32400, your streaming friend
+    Sonarr, on port 8989, find some TV to download
+    Jackett, on port 9117, a proxy between sonarr and torrent sites for search functions (Better than RSS)
     Portainer, on port 9000, cool container manager
     CouchPotato, on port 5050, find some movies to download
     Deluge, on port 8112, the best web based torrenter I can find
