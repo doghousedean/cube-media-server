@@ -33,9 +33,11 @@ services:
         volumes:
             - /storage/downloads:/downloads
             - /opt/deluge:/config
+            - /storage/scripts:/scripts
             - /storage/data/TV:/tv
             - /storage/data/movies:/movies
             - /storage/data/4k:/4k
+            - /storage/data/learning:/learning
             - /storage/completed:/completed
         network_mode: host
         environment:
