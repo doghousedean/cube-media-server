@@ -70,7 +70,7 @@ services:
             - /storage/jacket/config:/config
             - /storage/downloads:/downloads
         environment:
-            - TZ="europe/london"
+            - TZ=Europe/London
             - PUID=1000
             - PGID=1000
         network_mode: host
@@ -88,6 +88,20 @@ services:
             - /storage/data/TV:/tv
             - /storage/downloads:/downloads
         network_mode: host
+    Tautilli:
+        container_name: "Tautulli"
+        restart: always
+        image: tautulli/tautulli
+        ports:
+            - "8181:8181"
+        volumes:
+                - /storage/plex/config/Library/Application Support/Plex Media Server/Logs:/plex_logs:ro
+                - /storage/tautilli:/config
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Europe/London
+        network_mode: bridge
     watchtower:
         restart: always
         image: v2tec/watchtower
