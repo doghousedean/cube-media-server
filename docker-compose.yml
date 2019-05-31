@@ -111,6 +111,18 @@ services:
             - local
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
+    ombi:
+        image: linuxserver/ombi
+        container_name: Ombi
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Europe/London
+        volumes:
+            - /storage/ombi/config:/config
+        ports:
+            - 3579:3579
+        restart: unless-stopped
 networks:
     local:
         driver: bridge
